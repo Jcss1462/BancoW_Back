@@ -1,4 +1,7 @@
 ﻿using BancoW_Back.Contexts;
+using BancoW_Back.Dtos;
+using BancoW_Back.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BancoW_Back.Services;
 
@@ -9,9 +12,10 @@ public class UsuarioService : IUsuarioService
         _context = context;
     }
 
-    public Task<UsuarioService?> AuthenticateAsync(string email, string password)
+    public async Task<bool> AuthenticateAsync(LoginRequestDto loginRequest)
     {
-        throw new NotImplementedException();
+        Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.Password == loginRequest.Password);
+        return await Task.FromResult(usuario != null); ;
     }
 
     public Task<UsuarioService> RegisterUserAsync(UsuarioService user)
@@ -28,6 +32,6 @@ public class UsuarioService : IUsuarioService
 public interface IUsuarioService
 {
     Task<UsuarioService> RegisterUserAsync(UsuarioService user);
-    Task<UsuarioService?> AuthenticateAsync(string email, string password);
+    Task<bool> AuthenticateAsync(LoginRequestDto loginRequest);
     Task<bool> UserExistsAsync(string email);
 }
