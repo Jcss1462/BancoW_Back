@@ -24,8 +24,9 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] Usuario user)
-    {      
+    public async Task<IActionResult> Register([FromBody] RegisterRequestDto user)
+    {
+        await _usuarioService.RegisterUserAsync(user);
         return Ok();
     }
 

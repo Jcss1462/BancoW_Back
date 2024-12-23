@@ -40,9 +40,11 @@ builder.Services.AddSwaggerGen();
 //inicializo en contexto
 builder.Services.AddSqlServer<BancoWBdContext>(builder.Configuration.GetConnectionString("BancoWBd"));
 
+builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<ISimulacionService, SimulacionService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 builder.Services.AddCors(options =>
 {
