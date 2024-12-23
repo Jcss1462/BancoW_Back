@@ -2,6 +2,7 @@
 using BancoW_Back.Dtos;
 using BancoW_Back.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace BancoW_Back.Services;
 
@@ -27,26 +28,38 @@ public class UsuarioService : IUsuarioService
 
     public async Task RegisterUserAsync(RegisterRequestDto user)
     {
-        if (!await UserExistsAsync(user.Email))
+
+        if (!IsValidEmail(user.Email))
         {
-
-            Usuario newUser = new Usuario { 
-                Email = user.Email,
-                Password = _securityService.HashPassword(user.Password),
-            };
-
-            _context.Usuarios.Add(newUser);
-            await _context.SaveChangesAsync();
+            throw new Exception($"El email: {user.Email}, no tiene un formato válido.");
         }
-        else {
-            throw new Exception("El email: "+ user.Email + ",  ya está en uso.");
+
+        if (await UserExistsAsync(user.Email))
+        {
+            throw new Exception($"El email: {user.Email}, ya está en uso.");
         }
+
+        var newUser = new Usuario
+        {
+            Email = user.Email,
+            Password = _securityService.HashPassword(user.Password),
+        };
+
+        _context.Usuarios.Add(newUser);
+        await _context.SaveChangesAsync();
+
     }
 
     public async Task<bool> UserExistsAsync(string email)
     {
         Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
         return await Task.FromResult(usuario != null); ;
+    }
+
+    private bool IsValidEmail(string email)
+    {
+        var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        return emailRegex.IsMatch(email);
     }
 
 }
