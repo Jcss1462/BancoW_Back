@@ -42,6 +42,7 @@ builder.Services.AddSqlServer<BancoWBdContext>(builder.Configuration.GetConnecti
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<ISimulacionService, SimulacionService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddCors(options =>
 {
