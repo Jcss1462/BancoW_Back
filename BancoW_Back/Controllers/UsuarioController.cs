@@ -36,7 +36,7 @@ public class UsuarioController : ControllerBase
 
         if (!await _usuarioService.AuthenticateAsync(request))
         {
-            return Unauthorized();
+            throw new Exception("Usuario o contraseña incorrectas");
         }
 
         Usuario usuario= await _usuarioService.GetUsuarioByEmail(request.Email);
