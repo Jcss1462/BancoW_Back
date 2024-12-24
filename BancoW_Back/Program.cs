@@ -44,6 +44,7 @@ builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<ISimulacionService, SimulacionService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITerminoDePagoService, TerminoDePagoService>();
 
 
 builder.Services.AddCors(options =>
