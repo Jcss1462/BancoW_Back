@@ -3,6 +3,8 @@ using BancoW_Back.Services;
 using Microsoft.AspNetCore.Identity.Data;
 using BancoW_Back.Models;
 using Microsoft.AspNetCore.Authorization;
+using BancoW_Back.Dtos;
+using System.Runtime.Intrinsics.X86;
 
 namespace BancoW_Back.Controllers;
 
@@ -17,31 +19,41 @@ public class SimulacionController : ControllerBase
         _simulacionService = simulacionService;
     }
 
-    [HttpPost]
+    [HttpPost("createSimulation")]
     [Authorize]
-    public async Task<IActionResult> CreateSimulation([FromBody] Simulacion simulation)
+    public async Task<IActionResult> CreateSimulation([FromBody] NewSimulacionDto newSimulacion)
     {
+       await _simulacionService.CreateSimulationAsync(newSimulacion);
+       return Ok();
+    }
+
+    [HttpGet("getSimulations/{email}")]
+    [Authorize]
+    public async Task<IActionResult> GetSimulations(string email)
+    {
+        return Ok(await _simulacionService.GetSimulationsByUser(email));
+    }
+
+    [HttpGet("getSimulationsById/{id}")]
+    [Authorize]
+    public async Task<IActionResult> GetSimulatioById(int id)
+    {
+        return Ok(await _simulacionService.GetSimulacionById(id));
+    }
+
+    [HttpPut("updateSimulation")]
+    [Authorize]
+    public async Task<IActionResult> UpdateSimulation([FromBody] SimulacionDto simulationDto)
+    {
+        await _simulacionService.UpdateSimulationAsync(simulationDto);
         return Ok();
     }
 
-    [HttpGet("{userId}")]
+    [HttpDelete("deleteSimulation/{id}")]
     [Authorize]
-    public async Task<IActionResult> GetSimulations(int userId)
+    public async Task<IActionResult> DeleteSimulation(int id)
     {
-        return Ok();
-    }
-
-    [HttpPut]
-    [Authorize]
-    public async Task<IActionResult> UpdateSimulation([FromBody] Simulacion simulation)
-    {
-        return Ok();
-    }
-
-    [HttpDelete("{id}/{userId}")]
-    [Authorize]
-    public async Task<IActionResult> DeleteSimulation(int id, int userId)
-    {
+        await _simulacionService.DeleteSimulationAsync(id);
         return Ok();
     }
 }
