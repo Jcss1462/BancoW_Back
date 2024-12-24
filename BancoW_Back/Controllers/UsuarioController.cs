@@ -39,7 +39,9 @@ public class UsuarioController : ControllerBase
             return Unauthorized();
         }
 
-        var token = _authService.GenerateJwtToken(request.Email);
+        Usuario usuario= await _usuarioService.GetUsuarioByEmail(request.Email);
+
+        var token = _authService.GenerateJwtToken(request.Email, usuario.IdUsuario);
         return Ok(new { token });
     }
 

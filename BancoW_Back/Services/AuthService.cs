@@ -16,13 +16,15 @@ public class AuthService : IAuthService
         _configuration = configuration;
     }
 
-    public string GenerateJwtToken(string username)
+    public string GenerateJwtToken(string username, int idUsuario)
     {
         var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim("email", username), // Añadir el email
+            new Claim("IdUsuario", idUsuario.ToString())
         };
 
         var token = new JwtSecurityToken(
@@ -40,5 +42,5 @@ public class AuthService : IAuthService
 
 public interface IAuthService
 {
-    string GenerateJwtToken(string username);
+    string GenerateJwtToken(string username, int idUsuario);
 }

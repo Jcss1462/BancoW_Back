@@ -26,6 +26,17 @@ public class UsuarioService : IUsuarioService
         return await Task.FromResult(usuario != null);
     }
 
+    public async Task<Usuario> GetUsuarioByEmail(string email)
+    {
+       
+        Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
+
+        if (usuario == null) {
+            throw new Exception($"El usuario con email: {email}, no existe.");
+        }
+        return usuario;
+    }
+
     public async Task RegisterUserAsync(RegisterRequestDto user)
     {
 
@@ -69,4 +80,6 @@ public interface IUsuarioService
     Task RegisterUserAsync(RegisterRequestDto user);
     Task<bool> AuthenticateAsync(LoginRequestDto loginRequest);
     Task<bool> UserExistsAsync(string email);
+    Task<Usuario> GetUsuarioByEmail(string email);
+
 }
