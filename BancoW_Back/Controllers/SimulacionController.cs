@@ -23,8 +23,8 @@ public class SimulacionController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateSimulation([FromBody] NewSimulacionDto newSimulacion)
     {
-       await _simulacionService.CreateSimulationAsync(newSimulacion);
-       return Ok();
+       Simulacion simulacion = await _simulacionService.CreateSimulationAsync(newSimulacion);
+       return Ok(simulacion);
     }
 
     [HttpGet("getSimulations/{email}")]

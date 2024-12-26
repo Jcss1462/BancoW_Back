@@ -16,7 +16,7 @@ public class SimulacionService : ISimulacionService
         _context = context;
     }
 
-    public async Task CreateSimulationAsync(NewSimulacionDto newSimulacion)
+    public async Task<Simulacion> CreateSimulationAsync(NewSimulacionDto newSimulacion)
     {
         Simulacion simulacion = new Simulacion
         {
@@ -31,6 +31,8 @@ public class SimulacionService : ISimulacionService
 
         await _context.Simulacions.AddAsync(simulacion);
         await _context.SaveChangesAsync();
+
+        return simulacion;
     }
 
     public async Task DeleteSimulationAsync(int id)
@@ -125,7 +127,7 @@ public class SimulacionService : ISimulacionService
 
 public interface ISimulacionService
 {
-    Task CreateSimulationAsync(NewSimulacionDto newSimulacion);
+    Task<Simulacion> CreateSimulationAsync(NewSimulacionDto newSimulacion);
     Task<List<Simulacion>> GetSimulationsByUser(string email);
     Task UpdateSimulationAsync(SimulacionDto simulationDto);
     Task DeleteSimulationAsync(int id);
